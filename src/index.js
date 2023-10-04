@@ -3,10 +3,12 @@ import morgan from 'morgan'
 import { engine} from 'express-handlebars'
 import {join, dirname} from 'path'
 import { fileURLToPath } from 'url'
-import  empleadosRoutes from './routes/empelados.routes.js'
+import  empleadosRoutes from './routes/empleados.routes.js'
+import clientesRoutes from './routes/clientes.routes.js'
+import camionesRoutes from './routes/camiones.routes.js'
 //Initialization
 const app = express();
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url)); 
 
 //Settings
 app.set('port', process.env.PORT || 3000);
@@ -27,6 +29,8 @@ app.get('/',(req,res)=>{
     res.render('index')
 })
 app.use(empleadosRoutes);
+app.use(clientesRoutes);
+app.use(camionesRoutes);
 //Public files
 app.use(express.static(join(__dirname,'public')));
 //Run Server
