@@ -28,6 +28,11 @@ const Navbar = () => (
             <a className="nav-link" >Reportes</a>
             </Link>
           </li>
+          <li className="nav-item">
+            <Link legacyBehavior href="/autentificacion">
+            <a className="nav-link" >Login</a>
+            </Link>
+          </li>
           
         </ul>
       </div>

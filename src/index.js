@@ -1,16 +1,26 @@
 import express from 'express'
+import session from 'express-session'
 import morgan from 'morgan'
 import { engine} from 'express-handlebars'
 import {join, dirname} from 'path'
 import { fileURLToPath } from 'url'
 import  empleadosRoutes from './routes/empelados.routes.js'
+import clientesRoutes from './routes/clientes.routes.js'
+import camionesRoutes from './routes/camiones.routes.js'
 //Initialization
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+app.use(session({
+    secret: 'secretsoftware',
+    resave: false,
+    saveUninitialized: false,
+}));
+
 //Settings
 app.set('port', process.env.PORT || 3000);
 app.set('views', join(__dirname, 'views'));
+
 app.engine('.hbs', engine({
     defaultLayout: 'main',
     layoutsDir: join(app.get('views'), 'layouts'),
@@ -23,10 +33,16 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended:false}));
 app.use(express.json());
 //Routes
-app.get('/',(req,res)=>{
-    res.render('index')
-})
-app.use(empleadosRoutes);
+app.get('/', (req,res) => {
+    if (req.session.usuarioId) {
+        res.redirect('/list'); 
+    } else {
+        res.redirect('/login');
+    }
+});
+app.use('/',empleadosRoutes);
+app.use('/',clientesRoutes);
+app.use('/',camionesRoutes);
 //Public files
 app.use(express.static(join(__dirname,'public')));
 //Run Server

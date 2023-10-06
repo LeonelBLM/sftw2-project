@@ -5,8 +5,8 @@ import pool from '../database.js'
 
 const router = express.Router();
 
-router.get('/add', (req, res)=>{
-    res.render('empleados/add');
+router.get('/add1', (req, res)=>{
+    res.render('clientes/add1');
 
 });
 
@@ -16,24 +16,24 @@ router.get('/', (req, res) => {
         showNavbar }); 
 });
 
-router.post('/add', async(req, res)=>{
+router.post('/add1', async(req, res)=>{
     try{
         const {nombre, apellido, edad, correo_electronico} = req.body;
-        const newEmpleado = {
+        const newClientes = {
             nombre, apellido, edad, correo_electronico
         }
-        await pool.query('INSERT INTO empleados SET ?', [newEmpleado]);
-        res.redirect('/list');
+        await pool.query('INSERT INTO clientes SET ?', [newClientes]);
+        res.redirect('/list1');
     }
     catch(err){
         res.status(500).json({message:err.message});
     }
 });
 
-router.get('/list', async(req, res)=>{
+router.get('/list1', async(req, res)=>{
     try{
-        const[result] =await pool.query('SELECT * FROM empleados');
-        res.render('empleados/list', {empleados: result});
+        const[result] =await pool.query('SELECT * FROM clientes');
+        res.render('clientes/list1', {clientes: result});
 
     }
     catch(err){
@@ -42,25 +42,25 @@ router.get('/list', async(req, res)=>{
     }
 });
 
-router.get('/edit/:id', async(req, res)=>{
+router.get('/edit1/:id', async(req, res)=>{
     try{
         const {id} = req.params;
-        const [empleados] = await pool.query('SELECT * FROM empleados WHERE id = ?', [id]);
-        const empleadosEdit = empleados[0];
-        res.render('empleados/edit', {empleados: empleadosEdit});
+        const [clientes] = await pool.query('SELECT * FROM clientes WHERE id = ?', [id]);
+        const clientesEdit = clientes[0];
+        res.render('clientes/edit1', {clientes: clientesEdit});
     }
     catch(err){
         res.status(500).json({message:err.message});
     }
 })
 
-router.post('/edit/:id', async(req, res)=>{
+router.post('/edit1/:id', async(req, res)=>{
     try{
         const {nombre, apellido, edad, correo_electronico} = req.body;
         const {id} = req.params;
-        const editEmpleados = {nombre, apellido, edad, correo_electronico};
-        await pool.query('UPDATE empleados SET ? WHERE id = ?', [editEmpleados, id]);
-        res.redirect('/list');
+        const editclientes = {nombre, apellido, edad, correo_electronico};
+        await pool.query('UPDATE clientes SET ? WHERE id = ?', [editclientes, id]);
+        res.redirect('/list1');
     }
     catch(err){
         res.status(500).json({message:err.message});
@@ -70,8 +70,8 @@ router.post('/edit/:id', async(req, res)=>{
 router.get('/delete/:id', async(req, res)=>{
     try{
         const {id} = req.params;
-        await pool.query('DELETE FROM empleados WHERE id = ?', [id]);
-        res.redirect('/list');
+        await pool.query('DELETE FROM clientes WHERE id = ?', [id]);
+        res.redirect('/list1');
     }
     catch(err){
         res.status(500).json({message:err.message});
@@ -140,10 +140,10 @@ router.post('/login', async (req, res) => {
 });
 
 
-router.get('/list', requireAuth, async (req, res) => {
+router.get('/list1', requireAuth, async (req, res) => {
     try {
-        const [result] = await pool.query('SELECT * FROM empleados');
-        res.render('/list', { libros: result });
+        const [result] = await pool.query('SELECT * FROM clientes');
+        res.render('/list1', { libros: result });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
